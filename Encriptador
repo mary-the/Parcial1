@@ -1,0 +1,263 @@
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+
+
+
+class NodoCir {
+    int dato;
+    NodoCir siguiente;
+}
+class NodoLS {
+    int dato;
+    NodoLS siguiente;
+}
+class ListaCir {
+    NodoCir inicio = null;
+    
+    void insertar(int dato){
+        NodoCir nuevo = new NodoCir();
+        nuevo.dato = dato;
+        nuevo.siguiente = nuevo;
+        if(inicio == null){
+            inicio = nuevo;
+        }else{
+            NodoCir aux = inicio.siguiente;
+            NodoCir ant =inicio;
+            while(aux!=inicio){
+                ant = aux;
+                aux = aux.siguiente;
+            }
+            ant.siguiente = nuevo;
+            nuevo.siguiente = aux;
+        }
+    }
+    
+    void recorrer ()
+    {
+        if (inicio != null) {
+            NodoCir aux=inicio;
+            do {
+                System.out.print (aux.dato + "->");
+                aux = aux.siguiente;                
+            } while (aux!=inicio);
+            System.out.println();
+        }    
+    }
+    
+    void keyEnAscci(){
+        if(inicio != null){
+        NodoCir aux = inicio;
+        ListaCir keyEnAs = new ListaCir();
+        do{
+        int keyAs = aux.dato;
+        keyEnAs.insertar(aux.dato);
+        System.out.print(keyAs+"->");
+        aux =aux.siguiente;
+        }while(aux!=inicio);
+        
+        }
+    }
+        
+    
+}
+class Lista {
+     NodoLS inicio= null;
+     
+    void insertarFinal (int d){
+        NodoLS nuevo = new NodoLS ();
+        nuevo.dato = d;
+        nuevo.siguiente = null;
+        if(inicio == null){
+            inicio = nuevo;
+        } else{
+            NodoLS aux = inicio;
+            while(aux.siguiente!= null){
+                aux = aux.siguiente;
+            }
+        aux.siguiente= nuevo;
+        }
+    }
+    
+     void recorrer (){
+        NodoLS aux = inicio;
+        while (aux!= null) {
+            if(aux.siguiente == null)
+                System.out.println(aux.dato);
+            else
+            System.out.print(aux.dato+"->");
+            aux = aux.siguiente;
+        }
+    }
+     
+     Lista encriptar (ListaCir llave){
+        Lista encriptado = new Lista();
+        NodoLS aux1 = inicio;
+        NodoCir aux2 = llave.inicio;
+        while(aux1 != null){
+            if((aux1.dato+aux2.dato)<255){
+                encriptado.insertarFinal(aux1.dato+aux2.dato);
+            }else{
+                encriptado.insertarFinal((aux1.dato+aux2.dato)-255);
+                
+            }
+            aux1 = aux1.siguiente;
+            aux2 = aux2.siguiente;
+        }
+        //encriptado.recorrer();
+        return encriptado;
+     }
+     
+     Lista desencriptar (ListaCir llave){
+        Lista desencriptado = new Lista();
+        NodoLS aux1 = inicio;
+        NodoCir aux2 = llave.inicio;
+        while(aux1 != null){
+            if((aux1.dato-aux2.dato)<0){
+            desencriptado.insertarFinal(255+(aux1.dato+aux2.dato));
+            }else{
+                desencriptado.insertarFinal((aux1.dato-aux2.dato));
+                
+            }
+            aux1 = aux1.siguiente;
+            aux2 = aux2.siguiente;
+        }
+       // desencriptado.recorrer();
+        return desencriptado;
+     }
+}
+ class ArchivoBinario {
+     static Lista nose(String origen, String destino){
+       Lista archivoBytes = new Lista();
+        String rutaFichOrigen=origen;//Ruta al fichero de origen
+        String rutaFichDestino=destino; //Ruta al fichero de destino
+        File ficheroOrigen=new File(rutaFichOrigen);//Creamos objeto de tipo fichero con la ruta origen.
+        File ficheroDestino=new File(rutaFichDestino);//Creamos objeto de tipo fichero con la ruta destino.
+        BufferedInputStream lectorFichero;//Creo un objeto flujo buffer de lectura .
+        BufferedOutputStream escritorFichero;//Creo un objeto flujo buffer de escritura.
+        try{
+            lectorFichero=new BufferedInputStream(new FileInputStream(ficheroOrigen));//Inicializa el buffer de lectura con un objeto de tipo FileInputStream(Flujo de entrada a fichero).
+            escritorFichero=new BufferedOutputStream(new FileOutputStream(ficheroDestino));//Inicializa el buffer de escritura con un objeto de tipo FileOutputStream( flujo de salida a fichero).
+            int bytes;//variable que irÃ¡ conteniendo el byte a copiar en cada momento.
+            while((bytes=lectorFichero.read())!=-1){ //mientras no llegue a fin de fichero...
+                archivoBytes.insertarFinal(bytes);
+              //  archivoBytes.insertarFinal(bytes);
+             //   System.out.print(bytes);//se imprime el byte a copiar convertido a caracter por consola(no tiene sentido) 
+                escritorFichero.write(bytes);//se copia el flujo de bytes al fichero destino.
+            }
+            
+            lectorFichero.close();//cerramos el lector
+            escritorFichero.close();//cerramos el escritor
+            archivoBytes.recorrer();
+            
+            
+        }
+        catch(FileNotFoundException e){
+            e.printStackTrace();//traza de excepcion 
+            
+        }
+        catch(IOException e){
+            e.printStackTrace();//traza de excepcion 
+        }return archivoBytes;
+    }
+}
+public class Main {
+     public static void main(String[] args) throws FileNotFoundException, IOException {
+        // TODO code application logic here
+        int op = 0;
+        System.out.print("^***EncriptaciÃ³n***^\n");
+        System.out.print("Ingrese la ruta origen\n->");
+                Scanner leer = new Scanner(System.in);
+                String archivoOrigen= leer.nextLine();
+                System.out.print("Ingrese la ruta destino:\n->");
+                String archivoDestino= leer.nextLine();
+                System.out.print("Ingrese la contraseÃ±a:\n->");
+                    String contrasena = leer.nextLine();
+                    ListaCir key = new ListaCir();
+                    for(int i=0; i<(contrasena.length()); i++){
+                    int c = contrasena.charAt(i);
+                    // System.out.println(c);
+                    key.insertar(c);
+                    }
+        
+                Lista archivoBytes = new Lista();
+                String rutaFichOrigen=archivoOrigen;//Ruta al fichero de origen
+                String rutaFichDestino=archivoDestino; //Ruta al fichero de destino
+                File ficheroOrigen=new File(rutaFichOrigen);//Creamos objeto de tipo fichero con la ruta origen.
+                File ficheroDestino=new File(rutaFichDestino);//Creamos objeto de tipo fichero con la ruta destino.
+                BufferedInputStream lectorFichero;//Creo un objeto flujo buffer de lectura .
+                BufferedOutputStream escritorFichero;//Creo un objeto flujo buffer de escritura.
+                System.out.print("\n1.Encriptar\n2.Desencriptar\n->");
+                op = leer.nextInt();
+        switch(op){
+            case 1:
+                try{
+                    lectorFichero=new BufferedInputStream(new FileInputStream(ficheroOrigen));//Inicializa el buffer de lectura con un objeto de tipo FileInputStream(Flujo de entrada a fichero).
+                    // escritorFichero=new BufferedOutputStream(new FileOutputStream(ficheroDestino));//Inicializa el buffer de escritura con un objeto de tipo FileOutputStream( flujo de salida a fichero).
+                    int bytes;//variable que irÃ¡ conteniendo el byte a copiar en cada momento.
+                    while((bytes=lectorFichero.read())!=-1){ //mientras no llegue a fin de fichero...
+                        archivoBytes.insertarFinal(bytes);
+                    
+                    }
+
+                    lectorFichero.close();//cerramos el lector
+                    // escritorFichero.close();//cerramos el escritor
+                    //archivoBytes.recorrer();
+                    Lista resultado1 = archivoBytes.encriptar(key);
+                    NodoLS aux = resultado1.inicio;
+                    escritorFichero=new BufferedOutputStream(new FileOutputStream(ficheroDestino));
+                    while(aux != null){
+                    escritorFichero.write(aux.dato);
+                    //System.out.println(aux.dato);
+                    aux = aux.siguiente;
+                    }
+                    escritorFichero.close();
+                }
+                catch(FileNotFoundException e){
+                    e.printStackTrace();//traza de excepcion 
+                }
+                catch(IOException e){
+                e.printStackTrace();//traza de excepcion 
+                }
+                break;
+            case 2:
+                try{
+                    lectorFichero=new BufferedInputStream(new FileInputStream(ficheroOrigen));//Inicializa el buffer de lectura con un objeto de tipo FileInputStream(Flujo de entrada a fichero).
+                    // escritorFichero=new BufferedOutputStream(new FileOutputStream(ficheroDestino));//Inicializa el buffer de escritura con un objeto de tipo FileOutputStream( flujo de salida a fichero).
+                    int bytes;//variable que irÃ¡ conteniendo el byte a copiar en cada momento.
+                    while((bytes=lectorFichero.read())!=-1){ //mientras no llegue a fin de fichero...
+                        archivoBytes.insertarFinal(bytes);
+
+                    }
+
+                    lectorFichero.close();//cerramos el lector
+                    
+                    Lista resultado2 = archivoBytes.desencriptar(key);
+                    NodoLS aux = resultado2.inicio;
+                    escritorFichero=new BufferedOutputStream(new FileOutputStream(ficheroDestino));
+                    while(aux != null){
+                    escritorFichero.write(aux.dato);
+                    //System.out.println(aux.dato);
+                    aux = aux.siguiente;
+                    }
+                    escritorFichero.close();
+                }
+                catch(FileNotFoundException e){
+                    e.printStackTrace();//traza de excepcion 
+                }
+                catch(IOException e){
+                e.printStackTrace();//traza de excepcion 
+                }
+                break;
+            default:
+                System.out.println("OpciÃ³n incorrecta");
+                
+             }
+
+    }
+}
+
