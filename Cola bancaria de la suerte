@@ -1,0 +1,172 @@
+
+import java.util.Scanner;
+
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+
+/**
+ *
+ * @author Maryt
+ */
+class Nodo {
+     String N;
+     int P;
+    Nodo anterior;
+    Nodo siguiente;
+}
+class Cola {
+    Nodo inicio=null;
+    Nodo fin=null;
+    
+    void C (String N,int P){
+        Nodo nuevo=new Nodo();
+        nuevo.N=N;
+        nuevo.P=P;
+        nuevo.anterior=null;
+        nuevo.siguiente=null;
+        if (inicio==null){
+        inicio=nuevo;
+        fin=nuevo;
+        }else{
+        Nodo aux=fin;
+        aux.siguiente=nuevo;
+        nuevo.anterior=aux;
+        fin=nuevo;}
+        
+    }
+    
+    void S(char L,int I){
+    Nodo aux=inicio;
+    if(aux==null)return;
+    else{
+    while(aux!=null){
+    char L1=aux.N.charAt(0);
+    if(L==L1)aux.P=aux.P+I;       
+    aux=aux.siguiente;
+    }
+    }   
+    } 
+    
+    boolean isEmpty(){
+    if (inicio==null) return true;
+    return false;
+    }
+    
+    String A (){
+    String salida;
+    Nodo aux=inicio;
+    Nodo aux2=aux.siguiente;
+    if ((aux.anterior==null)&&(aux.siguiente==null)){
+        salida=aux.N;
+    inicio=null;
+    
+    }
+    else{
+    while(aux2!=null){
+    if(aux.P<aux2.P){
+    aux=aux2;
+    aux2=aux2.siguiente;    
+    }else{
+    aux2=aux2.siguiente;
+    }}
+    salida=aux.N;
+    
+    if(aux.anterior==null){
+            
+            aux2=aux.siguiente;
+            aux2.anterior=null;
+            inicio=aux2;
+            aux.siguiente=null;
+    }else{ 
+    aux2=aux.anterior;
+        
+    if(aux.siguiente!=null){
+      aux=aux.siguiente;
+    aux2.siguiente=aux;
+    aux.anterior=aux2;}
+    else{
+    aux2.siguiente=null;
+    aux.anterior=null;
+    }
+    }
+    } 
+    return salida;
+    }
+     
+     
+    void recorrer(){
+    Nodo aux=inicio;
+    while(aux!=null){
+    System.out.println(aux.N+" "+aux.P);
+    aux=aux.siguiente;
+    }
+    }
+}
+public class Main {
+    public static void main(String[] svgs) {
+     Cola E=new Cola();
+     
+    Scanner scan =new Scanner(System.in);
+     Scanner scan2 =new Scanner(System.in);
+     String Entradas=scan.next();
+     char caracter = Entradas.charAt(0);
+    // int Ent=Integer.parseInt(caracter);
+     char Ent=caracter;
+    if((Ent>=1)&&(Ent<=50000)){
+        
+    for (int i = 1; i <=Ent; i++) {
+            String opc=scan2.nextLine();
+            opc=opc+ "\u0020"+"0"+"\u0020"+"0"+"\u0020"+"0"; 
+            char A=opc.charAt(0);
+            
+            
+            if(A=='A'){
+                
+                if (E.isEmpty()==false){
+               String salida=E.A();
+                System.out.println(salida);
+                }}else{
+           
+            
+            String[] parts;
+            parts = opc.split(" ");
+            
+            
+            String part1 = parts[0];
+            System.out.println(parts[0]);
+            String part2 = parts[1];
+            System.out.println(parts[1]);
+            int part3 = Integer.parseInt(parts[2]);
+            System.out.println(parts[2]);
+            if(part3==0){
+               System.out.println("invalid");
+               
+            }else{
+            char op=part1.charAt(0);
+            switch (op) {
+                case 'C':
+                    //int P = Integer.parseInt(part3);
+                   int P=part3;
+                    E.C(part2, P);
+                    break;
+                case 'S':
+                    char L=part2.charAt(0);
+                   // int I = Integer.parseInt(part3);
+                     int I = part3;
+                    E.S(L,I);
+                    
+                    break;
+                default:
+                    return;
+            }
+            }   
+        }
+     
+     }
+    
+    }
+ 
+}}
