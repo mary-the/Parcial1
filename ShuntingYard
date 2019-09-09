@@ -1,0 +1,240 @@
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.Scanner;
+
+class NodoQueue {
+     char dato;
+    NodoQueue siguiente;
+    NodoQueue anterior;
+}
+class NodoStack {
+      char dato;
+    NodoStack siguiente;
+}
+class stack {
+     NodoStack inicio;
+    void push(char dato){
+        NodoStack nuevo=new NodoStack();
+        nuevo.dato = dato;
+        nuevo.siguiente = null;
+        if(inicio == null){
+            inicio = nuevo;
+        }else {
+            nuevo.siguiente = inicio;
+            inicio=nuevo;
+        }
+    }
+    char pop(){
+        if (inicio!= null){
+        NodoStack aux = inicio;
+        inicio = inicio.siguiente;
+        aux.siguiente = null;
+        return aux.dato;
+        }else{
+        return 0;}
+    }
+    
+    Boolean ispilavacia(){
+        return inicio==null;
+    }
+    
+    void imprimir(){
+        NodoStack aux=inicio;
+        while (aux!=null){
+            System.out.println(aux.dato);
+            aux=aux.siguiente;
+        }
+    }
+}
+class queue {
+    NodoQueue inicio = null;
+    NodoQueue fin = null;
+    
+    void queue(char dato){
+        NodoQueue nuevo = new NodoQueue();
+        nuevo.dato = dato;
+        nuevo.siguiente = null;
+        nuevo.anterior = null;
+        if (inicio != null){
+            inicio.anterior = nuevo;
+            nuevo.siguiente = inicio;
+            inicio = nuevo;
+        }else{
+            inicio = nuevo;
+            fin = nuevo;
+        }
+       // System.out.println("***"+nuevo.dato);
+    }
+    
+    char dequeue(){
+        if (fin != null){
+            NodoQueue aux = fin;
+         //   System.out.println(aux.dato);
+        if(inicio == fin){
+                inicio = null;
+                fin = null;
+            }else{
+                fin.siguiente = null;
+                fin = fin.anterior;
+//                fin.siguiente = null;
+       
+        }
+            aux.siguiente = null;
+            aux.anterior = null;
+           // System.out.println(aux.dato);
+            
+        return aux.dato;
+            
+        } else
+        return 0;
+    }
+}
+class ShuntingYard {
+      
+   
+    queue StringtoChar(String string){
+        queue cola = new queue ();
+        for (int i = 0; i < string.length(); i++) {
+            cola.queue(string.charAt(i));
+          //  System.out.println(string.charAt(i));
+        }
+        return cola;
+    }
+    
+    boolean isLetra(char caracter){
+             switch (caracter){
+                 case '+':
+                     return false;
+                 case '-':
+                     return false;
+                 case '*':
+                     return false;
+                 case '/':
+                     return false;
+                 case '^':
+                     return false;
+                 case '(':
+                     return false;
+                 case ')':
+                    return false;
+                 default:
+                     return true;
+             }
+    }
+    
+    int peso(char signo){
+         switch (signo){
+                 case '+':
+                 case '-':
+                    return 1;
+                 case '*':
+                 case '/':
+                    return 2;
+                 case '^':
+                    return 3;
+                 case '(':
+                    return 4;
+                 case ')':
+                    return 0;
+                 default: 
+                    return -1;
+             }
+    }
+    
+    boolean isAfueraMayorQueDentro(char dentro,char fuera){
+        return peso(fuera)>peso(dentro);
+    }
+    
+    void evalua(String expresion){
+         queue entrada = StringtoChar(expresion);
+         queue salida = new queue();
+         queue sal=new queue();
+         queue aux=new queue();
+         stack pila = new stack();
+         stack pila2 =new stack();
+         
+         
+         char caracter;
+         
+         while((caracter = entrada.dequeue ())!=0){
+            if(isLetra(caracter)){
+              //  System.out.println(caracter);
+                salida.queue(caracter);   
+            }else{
+                if(pila.ispilavacia()){
+                    pila.push(caracter);
+                }else{
+                    if(peso(caracter) == 0){
+                        char c;
+                        while((c=pila.pop())!= '('){
+                           salida.queue(c);
+                           }
+                    }else{
+                    char signo = pila.pop();
+                    if(signo == '('){
+                        pila.push(signo);
+                        pila.push(caracter);
+                    }else 
+                    if(isAfueraMayorQueDentro(signo,caracter)){
+                        pila.push(signo);
+                        pila.push(caracter);
+                    }else{
+                        salida.queue(signo);
+                        pila.push(caracter);
+                    } 
+                  }
+                }
+            }
+         }
+        //System.out.println();
+        while((caracter=pila.pop())!= 0){
+            salida.queue(caracter);
+        }
+        
+       sal=salida;
+       ColaPila(sal);
+       while((caracter=salida.dequeue())!=0){
+            System.out.print(caracter);
+        }
+       
+      
+       
+        /*while((caracter=sal.dequeue())!=0){
+            char car1;
+            System.out.print(caracter);
+            while(isLetra(caracter)==false){
+            car1=sal.dequeue();
+                  
+            }
+            }*/
+        }
+     void ColaPila(queue sal){
+        char caracter;
+        while((caracter=sal.dequeue())!=0){
+            System.out.print(caracter);
+        } 
+       }
+         System.out.println("");
+       }
+
+public class Main {
+     public static void main(String[] args) throws FileNotFoundException, IOException {
+       String cadena;
+       FileReader f = new FileReader("C:/Users/Maryt/Documents/prueba2.txt");
+       BufferedReader b = new BufferedReader(f);
+       cadena = b.readLine();
+     //  Scanner scanner = new Scanner(System.in);
+       
+       //String expresion = scanner.next();
+       
+       System.out.println(cadena);
+       
+       ShuntingYard sy = new ShuntingYard ();
+       sy.evalua(cadena);
+    }
+}
+
+
+
