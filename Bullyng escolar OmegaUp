@@ -1,0 +1,155 @@
+class Nodo {
+     String N;
+     int A;
+    Nodo anterior;
+    Nodo siguiente;
+}
+class salon{
+    Nodo inicio=null;
+    Nodo fin=null;
+     void S (String N,int P){
+        Nodo nuevo=new Nodo();
+        nuevo.N=N;
+        nuevo.A=P;
+        nuevo.anterior=null;
+        nuevo.siguiente=null;
+        if (inicio==null){
+        inicio=nuevo;
+        fin=nuevo;
+        }else{
+        Nodo aux=fin;
+        aux.siguiente=nuevo;
+        nuevo.anterior=aux;
+        fin=nuevo;}
+        
+    }
+     
+     String Mayor (){
+    String salida;
+    Nodo aux=inicio;
+    Nodo aux2=aux.siguiente;
+    if ((aux.anterior==null)&&(aux.siguiente==null)){
+        salida=aux.N;
+    inicio=null;
+    
+    }
+    else{
+    while(aux2!=null){
+    if(aux.A<aux2.A){
+    aux=aux2;
+    aux2=aux2.siguiente;    
+    }else{
+    aux2=aux2.siguiente;
+    }}
+    salida=aux.N;
+    
+    if(aux.anterior==null){
+            
+            aux2=aux.siguiente;
+            aux2.anterior=null;
+            inicio=aux2;
+            aux.siguiente=null;
+    }else{ 
+    aux2=aux.anterior;
+        
+    if(aux.siguiente!=null){
+      aux=aux.siguiente;
+    aux2.siguiente=aux;
+    aux.anterior=aux2;}
+    else{
+    aux2.siguiente=null;
+    aux.anterior=null;
+    }
+    }
+    } 
+    return salida;
+    }
+     
+ String Menor (){
+    String salida;
+    Nodo aux=inicio;
+    Nodo aux2=aux.siguiente;
+    if ((aux.anterior==null)&&(aux.siguiente==null)){
+        salida=aux.N;
+    inicio=null;
+    
+    }
+    else{
+    while(aux2!=null){
+    if(aux.A>aux2.A){
+    aux=aux2;
+    aux2=aux2.siguiente;    
+    }else{
+    aux2=aux2.siguiente;
+    }}
+    salida=aux.N;
+    
+    if(aux.anterior==null){
+            
+            aux2=aux.siguiente;
+            aux2.anterior=null;
+            inicio=aux2;
+            aux.siguiente=null;
+    }else{ 
+    aux2=aux.anterior;
+        
+    if(aux.siguiente!=null){
+      aux=aux.siguiente;
+    aux2.siguiente=aux;
+    aux.anterior=aux2;}
+    else{
+    aux2.siguiente=null;
+    aux.anterior=null;
+    }
+    }
+    } 
+    return salida;
+    }
+
+ void borrar(){
+ inicio=null;
+ 
+ }
+
+
+
+}
+
+public class Main {
+    public static void main(String[] args) {
+        
+    salon Salon=new salon();
+     Scanner scan =new Scanner(System.in);
+     Scanner scan2 =new Scanner(System.in);
+     int salon=scan.nextInt(); 
+     do{
+     if((salon>=2)&&(salon<=9)){
+         
+         for (int i = 0; i < salon; i++) {
+           
+         String nino=scan2.nextLine();
+         String[] parts= nino.split(" "); 
+         int part1 = Integer.parseInt(parts[0]);
+         int part2 = Integer.parseInt(parts[1]);
+         int part3 = Integer.parseInt(parts[2]);
+         String part4 = parts[3];
+         int tamaño=part4.length();
+         if (tamaño<=8){
+             int arena=part1*part2*part3;
+             if(arena<=250){
+             Salon.S(part4,arena);
+             }
+         
+         }
+         }
+         
+         String a=Salon.Mayor();
+         String b=Salon.Menor();
+         System.out.println(a+" took clay from "+b);
+         Salon.borrar();
+    }
+     salon=scan.nextInt(); 
+     
+     }while(salon!=-1);
+}
+}
