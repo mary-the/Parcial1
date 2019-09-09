@@ -1,0 +1,70 @@
+import java.util.Scanner;
+class Nodo {
+    int dato;
+    Nodo siguiente;
+    Nodo anterior;
+}
+class PilasColas {
+    Nodo inicio=null;
+    Nodo fin=null;
+    
+      void insertar (int elemento){
+        Nodo nuevo= new Nodo();
+        nuevo.dato=elemento;
+        nuevo.siguiente=null;
+        nuevo.anterior=null;
+        if (inicio==null){
+        inicio=nuevo;
+        fin=nuevo; 
+        }else{
+        inicio.anterior=nuevo;
+        nuevo.siguiente=inicio;
+        inicio=nuevo;}
+          }
+      
+      void recorrerPila(){   
+        Nodo aux=inicio;
+        while (aux!=null){
+            System.out.print(aux.dato+" ");
+            aux=aux.siguiente; }}
+      
+       void recorrerCola(){   
+        Nodo aux=fin;
+        while (aux!=null){
+            System.out.print(aux.dato+" ");
+            aux=aux.anterior; }}
+       
+       void sacar(){
+       recorrerCola();
+           System.out.println(" ");
+       recorrerPila();
+       }
+      
+  void cantidad(int a){
+  
+  };
+
+
+
+}
+public class Ejercicio {
+    public static void main(String[] svgs) {
+        
+        Scanner a =new Scanner(System.in);
+        PilasColas pc=new PilasColas();
+        
+        int dato=a.nextInt();
+        
+        pc.cantidad(dato);
+        dato=a.nextInt();
+        pc.insertar(dato);
+        dato=a.nextInt();
+        pc.insertar(dato);
+        dato=a.nextInt();
+        pc.insertar(dato);
+        pc.sacar();
+
+        
+    }
+    
+}
