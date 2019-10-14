@@ -1,0 +1,51 @@
+
+import java.util.Scanner;
+
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+
+/**
+ *
+ * @author Maryt
+ */
+public class Main {
+eq quino =new eq();
+Scanner scan=new Scanner(System.in);
+String poem=scan.nextLine();
+quino.equi(poem);
+}
+class eq{
+String[] poem;
+    
+int maxln= 100; // o 110
+int rows=4;
+int cols=2;
+int dirs=8;
+//int dr[]=new int[dirs];
+int dr[]={2,2,1,-1,2,-2,-2,1,-1};
+int dc[]={1,-1,2,2,1,-1,-2,-2};
+String keys[][]={{"qwertyuiop","asdfghjkl;","zxcvbnm,./","**      **"},
+               {"QWERTYUIOP","ASDFGHJKL:","ZXCVBNM<>?","**      **"}};
+char equi(Strin poem){};
+int dfs(int i, int ar,int ac, int br, int bc){
+int d;
+char nc;
+for (d=0; d<dirs; d++){
+int ar_=ar+dr[d];
+int ac_=ac+dr[d];
+if( ar_>0&&ar_<rows
+    &&ac_>=0&&ac_<cols&&
+        (ar_!=br||ac!=bc)&&((nc = keys[keys[0][br][bc] == '*'][ar_][ac_]) == poem[i] ||
+			 nc == '*'
+			 ) &&
+			dfs(i + (nc != '*'), ar_, ac_, br, bc)){
+        
+return 1; }
+}
+return 0;
+}
+
+}
