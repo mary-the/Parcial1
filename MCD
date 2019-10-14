@@ -1,0 +1,56 @@
+
+import java.util.Scanner;
+
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+
+/**
+ *
+ * @author Maryt
+ */
+public class Main {
+    public static void main(String[] args) {
+       int n;
+       int suma=0;
+       Scanner scanner= new Scanner(System.in);
+    String[] arItems = scanner.nextLine().split(" ");
+    int x=Integer.parseInt(arItems[0]);
+    int y=Integer.parseInt(arItems[1]);
+       
+     if(x>y){
+     n=y;
+     }else{
+     n=x;
+     }  
+     
+        
+     int resultado=nn(x,y,n,suma);
+        System.out.println(resultado);
+    }
+
+    
+    
+    
+    
+    private static int nn(int x, int y,int n,int suma){
+     if(((x!=1)&&(y!=1))&&(n>1)){  
+     if((x%n==0)&&(y%n==0)){
+     x=x/n;
+     y=y/n;
+     suma=suma+n;
+     return nn(x,y,n,suma);
+     
+     }else{
+         n=n-1;
+     return nn(x,y,n,suma);
+     }}
+        
+        if(suma==0){
+        suma=suma+1;
+        }
+     return suma;
+    }
+}
